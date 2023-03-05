@@ -3,6 +3,7 @@ package invoicingSystem2;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.InputMismatchException;
@@ -22,6 +23,33 @@ public class InvoicingSystem {
 	private static int[] menuCounters = new int[9];
 
 	public static void main(String[] args) {
+		// initialize database
+  String url = "jdbc:sqlserver://localhost:1433;" +
+                "databaseName=Invoice system JDBC;" +
+                "encrypt=true;" +
+                "trustServerCertificate=true";
+		String username = "sa";
+		String password = "root";
+		try {
+			DatabaseInitializer.initialize(url, username, password);
+		} catch (SQLException e) {
+			System.out.println("Error initializing database: " + e.getMessage());
+			return;
+		}
+
+		// create invoice
+		Invoice invoice1 = new Invoice("John Doe", "1234567890", 1, new Date());
+
+		// add items to invoice
+		Item item1 = new Item("001", "Item 1", 10.0, 2);
+		Item item2 = new Item("002", "Item 2", 20.0, 3);
+		invoice1.addItem(item1);
+		invoice1.addItem(item2);
+
+		// display invoice details
+		invoice1.displayInvoice();
+		
+		
 		Scanner input = new Scanner(System.in);
 		
 		while (true) {
