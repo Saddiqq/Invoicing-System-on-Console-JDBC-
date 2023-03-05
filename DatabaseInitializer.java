@@ -8,10 +8,10 @@ import java.sql.SQLException;
 public class DatabaseInitializer {
 
     // Initialize database with relevant tables
-    public static void initialize(String connectionUrl, String username, String password) throws SQLException {
+    public static void initialize(String url, String username, String password) throws SQLException {
         
         // Connect to database
-        try (Connection connection = DriverManager.getConnection(connectionUrl, username, password)) {
+        try (Connection connection = DriverManager.getConnection(url, username, password)) {
             
             // Create table for invoices
             String createInvoicesTable = "CREATE TABLE invoices (" +
