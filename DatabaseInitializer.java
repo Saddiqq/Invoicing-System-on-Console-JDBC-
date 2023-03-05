@@ -1,47 +1,48 @@
 package invoicingSystem2;
 
 import java.sql.Connection;
+import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 public class DatabaseInitializer {
 
-    // Initialize database with relevant tables
-    public static void initialize(String url, String username, String password) throws SQLException {
-        
-        // Connect to database
-        try (Connection connection = DriverManager.getConnection(url, username, password)) {
-            
-            // Create table for invoices
-            String createInvoicesTable = "CREATE TABLE invoices (" +
-                    "invoice_number INT PRIMARY KEY," +
-                    "customer_name VARCHAR(255) NOT NULL," +
-                    "phone_number VARCHAR(20)," +
-                    "invoice_date DATE NOT NULL," +
-                    "total_amount DECIMAL(10, 2) NOT NULL," +
-                    "paid_amount DECIMAL(10, 2) NOT NULL," +
-                    "balance DECIMAL(10, 2) NOT NULL)";
-            try (PreparedStatement statement = connection.prepareStatement(createInvoicesTable)) {
-                statement.execute();
-            }
-            
-            // Create table for items
-            String createItemsTable = "CREATE TABLE items (" +
-                    "item_id INT PRIMARY KEY," +
-                    "invoice_number INT NOT NULL," +
-                    "item_name VARCHAR(255) NOT NULL," +
-                    "unit_price DECIMAL(10, 2) NOT NULL," +
-                    "quantity INT NOT NULL," +
-                    "qty_amount DECIMAL(10, 2) NOT NULL," +
-                    "FOREIGN KEY (invoice_number) REFERENCES invoices (invoice_number))";
-            try (PreparedStatement statement = connection.prepareStatement(createItemsTable)) {
-                statement.execute();
-            }
-        }
-    }
-}
+	String url = "jdbc:sqlserver://localhost:1433;" + "databaseName=invoice;" + "encrypt=true;" + "trustServerCertificate=true";
+	String user = "sa";
+	String pass = "root";
+Connection con = null;
 
-
-
-
+try
+	{
+		Driver driver = (Driver) Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver").newInstance();
+		DriverManager.registerDriver(driver);
+		con = DriverManager.getConnection(url, user, pass);
+		Statement st = con.createStatement();
+//// Table 1 ////
+		String sql = "CREATE TABLE Customers (Customer_Id INT PRIMARY KEY IDENTITY, "
+				+ "Customer_Full_Name VARCHAR(25) NOT NULL, " + "Customer_Phone_Number VARCHAR(10),);"
+/// Table 2 ////
+				+ "CREATE TABLE Invoices (Invoice_Id INT PRIMARY KEY ," + "Customer_Id int REFERENCES Customer_Id(id),"
+				+ "Invoice_Date VARCHAR(255)," + "total_Amount int," + "paid_Amount int not null ," + ""
+				+ "total_Balance int NOT NULL);"
+///////////////////////////////// the 3 table ///////////////////////////////////////
+				+ "CREATE TABLE InvoiceItems (\r\n" + " InvoiceItem_Id INTEGER PRIMARY KEY,\r\n"
+				+ " Invoice_Id INTEGER REFERENCES Invoice_Id(id),\r\n"
+				+ " Customer_Id INTEGER REFERENCES Customer_Id(id),\r\n" + " Number_Of_Items int NOT NULL,\r\n"
+				+ " total_Amount int,\r\n" + " paid_Amount DECIMAL NOT NULL\r\n" + " total_Balance DECIMAL NOT NULL\r\n" 
+				+ ");\r\n" + "\r\n";
+		Integer m = st.executeUpdate(sql);
+		if (m >= 1) {
+			System.out.println("inserted successfully : " + sql);
+		} else {
+			System.out.println("insertion failed");
+		}
+		con.close();
+	}catch(
+	Exception ex)
+	{
+		System.err.println(ex);
+	}
+}}

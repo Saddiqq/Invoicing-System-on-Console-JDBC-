@@ -3,7 +3,11 @@ package invoicingSystem2;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.InputMismatchException;
@@ -24,32 +28,35 @@ public class InvoicingSystem {
 
 	public static void main(String[] args) {
 		// initialize database
-  String url = "jdbc:sqlserver://localhost:1433;" +
-                "databaseName=Invoice system JDBC;" +
-                "encrypt=true;" +
-                "trustServerCertificate=true";
-		String username = "sa";
-		String password = "root";
-		try {
-			DatabaseInitializer.initialize(url, username, password);
-		} catch (SQLException e) {
-			System.out.println("Error initializing database: " + e.getMessage());
-			return;
-		}
-
-		// create invoice
-		Invoice invoice1 = new Invoice("John Doe", "1234567890", 1, new Date());
-
-		// add items to invoice
-		Item item1 = new Item("001", "Item 1", 10.0, 2);
-		Item item2 = new Item("002", "Item 2", 20.0, 3);
-		invoice1.addItem(item1);
-		invoice1.addItem(item2);
-
-		// display invoice details
-		invoice1.displayInvoice();
-		
-		
+//  String url = "jdbc:sqlserver://localhost:1433;" +
+//                "databaseName=Invoice system JDBC;" +
+//                "encrypt=true;" +
+//                "trustServerCertificate=true";
+//		String username = "sa";
+//		String password = "root";
+//				 Connection con = null;
+//				 try {
+//				 Driver driver = (Driver) Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver").newInstance();
+//				 DriverManager.registerDriver(driver);
+//				 con = DriverManager.getConnection(url, username, pass);
+//				 Statement st = con.createStatement();
+//				 String sql = "INSERT INTO Customers (Customer_Full_Name,Customer_Phone_Number)"
+//				 +"VALUES ('"Ahmed"','"+customerPhomeNumber+"')";
+//				 System.out.println(sql);
+//				 Integer m = st.executeUpdate(sql);
+//				 if (m >= 1) {
+//				 System.out.println("inserted successfully : " + sql);
+//				 } else {
+//				 System.out.println("insertion failed");
+//				 }
+//				 String sql1 = "Select * from Employee_Type";
+//				 ResultSet resultSet = st.executeQuery(sql1);
+//				 con.close();
+//				 } catch (Exception ex) {
+//				 System.err.println(ex);
+//				 }
+//		
+//		
 		Scanner input = new Scanner(System.in);
 		
 		while (true) {
